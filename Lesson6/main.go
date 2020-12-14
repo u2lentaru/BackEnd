@@ -15,7 +15,7 @@ type Shard struct {
 	Number  int
 }
 
-//Manager struct
+//Manager struct - shard manager
 type Manager struct {
 	size int
 	ss   *sync.Map
