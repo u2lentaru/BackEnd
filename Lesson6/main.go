@@ -164,7 +164,7 @@ func (u *User) Delete() error {
 
 ////////////////////////task2/////////////////////
 
-//RManager struct
+//RManager struct - replica manager
 type RManager struct {
 	size int
 	ss   *sync.Map
