@@ -6,6 +6,6 @@ package consistenthash
 
 // func (r *Ring) RemoveNode(id string) error
 
-// func (r *Ring) Get(key string) string
+// func (r *Ring) NodeByID(key string) string
 
 //В процессе реализации
