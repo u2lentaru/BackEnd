@@ -7,10 +7,12 @@ import (
 	"github.com/go-redis/redis/v8"
 )
 
+//RedisClient struct
 type RedisClient struct {
 	*redis.Client
 }
 
+//NewRedisClient func
 func NewRedisClient(host, port string) (*RedisClient, error) {
 	client := redis.NewClient(&redis.Options{
 		Addr:     fmt.Sprintf("%s:%s", host, port),
@@ -30,10 +32,12 @@ func NewRedisClient(host, port string) (*RedisClient, error) {
 	return c, nil
 }
 
+//Close func
 func (c *RedisClient) Close() error {
 	return c.Client.Close()
 }
 
+//GetRecord func
 func (c *RedisClient) GetRecord(mkey string) ([]byte, error) {
 	data, err := c.Get(context.Background(), mkey).Bytes()
 	if err == redis.Nil {
