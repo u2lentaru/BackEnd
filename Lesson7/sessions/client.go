@@ -3,6 +3,7 @@ package main
 import (
 	"context"
 	"fmt"
+	"time"
 
 	"github.com/go-redis/redis/v8"
 )
@@ -10,6 +11,7 @@ import (
 //RedisClient struct
 type RedisClient struct {
 	*redis.Client
+	TTL time.Duration
 }
 
 //NewRedisClient func
