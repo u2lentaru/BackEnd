@@ -8,15 +8,18 @@ import (
 	uuid "github.com/satori/go.uuid"
 )
 
+//Session struct
 type Session struct {
 	Login     string
 	Useragent string
 }
 
+//SessionID struct
 type SessionID struct {
 	ID string
 }
 
+//Create func
 func (c *RedisClient) Create(in Session) (*SessionID, error) {
 	data, err := json.Marshal(in)
 	if err != nil {
@@ -36,6 +39,7 @@ func (c *RedisClient) Create(in Session) (*SessionID, error) {
 	return &id, nil
 }
 
+//Check func
 func (c *RedisClient) Check(in SessionID) (*Session, error) {
 	mkey := newRedisKey(in.ID)
 	data, err := c.GetRecord(mkey)
@@ -55,6 +59,7 @@ func (c *RedisClient) Check(in SessionID) (*Session, error) {
 	return sess, nil
 }
 
+//Delete func
 func (c *RedisClient) Delete(in SessionID) error {
 	mkey := newRedisKey(in.ID)
 

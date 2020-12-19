@@ -26,6 +26,7 @@ const (
 
 var welcome = "Welcome, %s <br />\nSession User-Agent: %s <br />\n<a href=\"/logout\">logout</a>"
 
+//RootHandler func
 func (c RedisClient) RootHandler(w http.ResponseWriter, r *http.Request) {
 	sess, err := c.checkSession(r)
 	if err != nil {
@@ -49,6 +50,7 @@ var users = map[string]string{
 
 const cookieName = "session_id"
 
+//LoginHandler func
 func (c RedisClient) LoginHandler(w http.ResponseWriter, r *http.Request) {
 	inputLogin := r.FormValue(loginValue)
 	inputPass := r.FormValue(passwordValue)
@@ -82,6 +84,7 @@ func (c RedisClient) LoginHandler(w http.ResponseWriter, r *http.Request) {
 	http.Redirect(w, r, "/", http.StatusFound)
 }
 
+//LogoutHandler func
 func (c RedisClient) LogoutHandler(w http.ResponseWriter, r *http.Request) {
 	session, err := r.Cookie(cookieName)
 	if err == http.ErrNoCookie {
