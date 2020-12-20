@@ -25,8 +25,9 @@ func main() {
 	const (
 		mkey = "rebuild_cache_key"
 
-		customTagOne = "python"
-		customTagTwo = "go"
+		customTagOne  = "python"
+		customTagTwo  = "go"
+		customTagHabr = "habr"
 	)
 	tags := []string{customTagHabr, customTagGeekBrains}
 
