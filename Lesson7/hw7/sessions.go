@@ -10,9 +10,9 @@ import (
 
 //Session struct
 type Session struct {
-	Login     string
-	Useragent string
-	//ConfirmationCode int
+	Login            string
+	Useragent        string
+	ConfirmationCode int
 }
 
 //SessionID struct

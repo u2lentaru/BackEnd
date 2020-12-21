@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"log"
 	"net/http"
+	"strconv"
 	"time"
 )
 
@@ -22,6 +23,7 @@ var loginFormTmpl = []byte(`
 const (
 	loginValue    = "login"
 	passwordValue = "password"
+	confCode      = 777
 )
 
 var welcome = "Welcome, %s <br />\nSession User-Agent: %s <br />\n<a href=\"/logout\">logout</a>"
@@ -63,8 +65,9 @@ func (c RedisClient) LoginHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	sess, err := c.Create(Session{
-		Login:     inputLogin,
-		Useragent: r.UserAgent(),
+		Login:            inputLogin,
+		Useragent:        r.UserAgent(),
+		ConfirmationCode: confCode,
 	})
 
 	if err != nil {
@@ -126,4 +129,24 @@ func (c RedisClient) checkSession(r *http.Request) (*Session, error) {
 	}
 
 	return sess, nil
+}
+
+//ConfirmHandler func
+//В процессе доработки!!!!!!!!!!!!!!!!!!!!!
+func (c RedisClient) ConfirmHandler(w http.ResponseWriter, r *http.Request) {
+	ccode := r.URL.Query().Get("ccode")
+	sessid := r.URL.Query().Get("sessid")
+
+	sess, err := c.Check(SessionID{ID: sessid})
+
+	if err != nil {
+		err = fmt.Errorf("check session: %w", err)
+		log.Printf("[ERR] %v", err)
+		w.WriteHeader(http.StatusInternalServerError)
+		return
+	}
+
+	if ccode == strconv.Itoa(sess.ConfirmationCode) {
+		http.Redirect(w, r, "/", http.StatusFound)
+	}
 }

@@ -23,6 +23,7 @@ func main() {
 	http.HandleFunc("/", client.RootHandler)
 	http.HandleFunc("/login", client.LoginHandler)
 	http.HandleFunc("/logout", client.LogoutHandler)
+	http.HandleFunc("/confirm", client.ConfirmHandler)
 
 	log.Printf("starting server at :%s", servicePort)
 	log.Fatal(http.ListenAndServe(":"+servicePort, nil))
