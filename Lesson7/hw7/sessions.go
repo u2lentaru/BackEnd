@@ -12,6 +12,7 @@ import (
 type Session struct {
 	Login     string
 	Useragent string
+	//ConfirmationCode int
 }
 
 //SessionID struct
