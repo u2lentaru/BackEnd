@@ -1,6 +1,7 @@
 package main
 
 import (
+	"context"
 	"fmt"
 	"log"
 	"net/http"
@@ -132,7 +133,6 @@ func (c RedisClient) checkSession(r *http.Request) (*Session, error) {
 }
 
 //ConfirmHandler func
-//В процессе доработки!!!!!!!!!!!!!!!!!!!!!
 func (c RedisClient) ConfirmHandler(w http.ResponseWriter, r *http.Request) {
 	ccode := r.URL.Query().Get("ccode")
 	sessid := r.URL.Query().Get("sessid")
@@ -147,6 +147,17 @@ func (c RedisClient) ConfirmHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	if ccode == strconv.Itoa(sess.ConfirmationCode) {
+		mkey := newRedisKey(sessid)
+		data := Session{
+			Login:            sess.Login,
+			Useragent:        sess.Useragent,
+			ConfirmationCode: 0,
+		}
+		err = c.Set(context.Background(), mkey, data, -1).Err()
+		if err != nil {
+			fmt.Errorf("redis: set key %q: %w", mkey, err)
+			return
+		}
 		http.Redirect(w, r, "/", http.StatusFound)
 	}
 }
