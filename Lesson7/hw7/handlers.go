@@ -132,6 +132,8 @@ func (c RedisClient) checkSession(r *http.Request) (*Session, error) {
 	return sess, nil
 }
 
+////////task1///////////////
+
 //ConfirmHandler func
 func (c RedisClient) ConfirmHandler(w http.ResponseWriter, r *http.Request) {
 	ccode := r.URL.Query().Get("ccode")
@@ -162,7 +164,6 @@ func (c RedisClient) ConfirmHandler(w http.ResponseWriter, r *http.Request) {
 		}
 
 		http.Redirect(w, r, "/", http.StatusFound)
-
 	}
 
 }
