@@ -155,9 +155,14 @@ func (c RedisClient) ConfirmHandler(w http.ResponseWriter, r *http.Request) {
 		}
 		err = c.Set(context.Background(), mkey, data, -1).Err()
 		if err != nil {
-			fmt.Errorf("redis: set key %q: %w", mkey, err)
+			err = fmt.Errorf("redis: set key %q: %w", mkey, err)
+			log.Printf("[ERR] %v", err)
+			w.WriteHeader(http.StatusInternalServerError)
 			return
 		}
+
 		http.Redirect(w, r, "/", http.StatusFound)
+
 	}
+
 }
