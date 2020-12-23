@@ -165,7 +165,7 @@ func (c RedisClient) ConfirmHandler(w http.ResponseWriter, r *http.Request) {
 
 	if sess.ConfirmationCode == 0 {
 		w.Header().Set("Content-Type", "text/html")
-		_, _ = fmt.Fprintln(w, fmt.Sprintf("Session already confirmed!"))
+		_, _ = fmt.Fprintln(w, fmt.Sprintf("Session already confirmed!!!"))
 
 	}
 
