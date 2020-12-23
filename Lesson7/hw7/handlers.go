@@ -134,6 +134,7 @@ func (c RedisClient) checkSession(r *http.Request) (*Session, error) {
 
 ////////task1///////////////
 
+//На email отправляем ссылку с кодом подтверждения и ID сессии
 //ConfirmHandler func
 func (c RedisClient) ConfirmHandler(w http.ResponseWriter, r *http.Request) {
 	ccode := r.URL.Query().Get("ccode")
