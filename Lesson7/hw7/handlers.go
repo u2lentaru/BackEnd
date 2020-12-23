@@ -137,15 +137,24 @@ func (c RedisClient) checkSession(r *http.Request) (*Session, error) {
 
 ////////task1///////////////
 
-//На email отправляем ссылку с кодом подтверждения и ID сессии
+//На email отправляем ссылку с кодом подтверждения
 
 //ConfirmHandler func
 func (c RedisClient) ConfirmHandler(w http.ResponseWriter, r *http.Request) {
 	ccode := r.URL.Query().Get("ccode")
-	sessid := r.URL.Query().Get("sessid")
 
-	sess, err := c.Check(SessionID{ID: sessid})
+	cookieSessionID, err := r.Cookie(cookieName)
+	if err == http.ErrNoCookie {
+		log.Println(err)
+		return
+	} else if err != nil {
+		log.Println(err)
+		return
+	}
 
+	sessid := SessionID{ID: cookieSessionID.Value}
+
+	sess, err := c.checkSession(r)
 	if err != nil {
 		err = fmt.Errorf("check session: %w", err)
 		log.Printf("[ERR] %v", err)
@@ -153,8 +162,13 @@ func (c RedisClient) ConfirmHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	if sess == nil {
+		_, _ = w.Write(loginFormTmpl)
+		return
+	}
+
 	if ccode == strconv.Itoa(sess.ConfirmationCode) {
-		mkey := newRedisKey(sessid)
+		mkey := newRedisKey(sessid.ID)
 		data := Session{
 			Login:            sess.Login,
 			Useragent:        sess.Useragent,
@@ -175,6 +189,8 @@ func (c RedisClient) ConfirmHandler(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 
+		w.Header().Set("Content-Type", "text/html")
+		_, _ = fmt.Fprintln(w, fmt.Sprintf("Session confirmed!"))
 		http.Redirect(w, r, "/", http.StatusFound)
 	}
 
