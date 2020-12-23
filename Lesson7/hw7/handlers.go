@@ -160,6 +160,13 @@ func (c RedisClient) ConfirmHandler(w http.ResponseWriter, r *http.Request) {
 		log.Printf("[ERR] %v", err)
 		w.WriteHeader(http.StatusInternalServerError)
 		return
+
+	}
+
+	if sess.ConfirmationCode == 0 {
+		w.Header().Set("Content-Type", "text/html")
+		_, _ = fmt.Fprintln(w, fmt.Sprintf("Session already confirmed!"))
+
 	}
 
 	if sess == nil {
@@ -192,6 +199,7 @@ func (c RedisClient) ConfirmHandler(w http.ResponseWriter, r *http.Request) {
 		w.Header().Set("Content-Type", "text/html")
 		_, _ = fmt.Fprintln(w, fmt.Sprintf("Session confirmed!"))
 		http.Redirect(w, r, "/", http.StatusFound)
+
 	}
 
 }
