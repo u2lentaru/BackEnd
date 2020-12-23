@@ -2,6 +2,7 @@ package main
 
 import (
 	"context"
+	"encoding/json"
 	"fmt"
 	"log"
 	"net/http"
@@ -123,6 +124,8 @@ func (c RedisClient) checkSession(r *http.Request) (*Session, error) {
 		return nil, err
 	}
 
+	// fmt.Println(SessionID{ID: cookieSessionID.Value})
+
 	sess, err := c.Check(SessionID{ID: cookieSessionID.Value})
 	if err != nil {
 		return nil, fmt.Errorf("check session value %q: %w", cookieSessionID.Value,
@@ -135,6 +138,7 @@ func (c RedisClient) checkSession(r *http.Request) (*Session, error) {
 ////////task1///////////////
 
 //На email отправляем ссылку с кодом подтверждения и ID сессии
+
 //ConfirmHandler func
 func (c RedisClient) ConfirmHandler(w http.ResponseWriter, r *http.Request) {
 	ccode := r.URL.Query().Get("ccode")
@@ -156,7 +160,14 @@ func (c RedisClient) ConfirmHandler(w http.ResponseWriter, r *http.Request) {
 			Useragent:        sess.Useragent,
 			ConfirmationCode: 0,
 		}
-		err = c.Set(context.Background(), mkey, data, -1).Err()
+
+		mdata, err := json.Marshal(data)
+		if err != nil {
+			log.Println("marshal session ID: %w", err)
+			return
+		}
+
+		err = c.Set(context.Background(), mkey, mdata, -1).Err()
 		if err != nil {
 			err = fmt.Errorf("redis: set key %q: %w", mkey, err)
 			log.Printf("[ERR] %v", err)
