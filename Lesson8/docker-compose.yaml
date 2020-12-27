@@ -43,8 +43,8 @@ services:
 "zookeeper:2181"] 
      interval: 30s 
      timeout: 10s 
-     retries: 4 
-  redis: 
+     retries: 4
+ redis: 
     image: redis:6.0 
     ports: 
      - 6379:6379
