@@ -4,7 +4,7 @@ services:
  api: 
    build: 
      dockerfile: Dockerfile 
-     context: . 
+     context: "." 
    command: "./bin/api" 
    environment: 
      - KAFKA_BROKERS=kafka:9092 
@@ -17,7 +17,7 @@ services:
  process: 
    build: 
      dockerfile: Dockerfile 
-     context: . 
+     context: "." 
    command: "./bin/process" 
    environment: 
      - KAFKA_BROKERS=kafka:9092 
