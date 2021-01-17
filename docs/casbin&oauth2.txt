@@ -1,0 +1,7 @@
+oauth2
+https://pkg.go.dev/golang.org/x/oauth2
+https://hackernoon.com/build-your-own-oauth2-server-in-go-7d0f660732c3
+
+casbin
+https://casbin.org/docs/en/overview
+https://casbin.org/docs/en/adapters
